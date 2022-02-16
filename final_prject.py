@@ -7,126 +7,11 @@
 
 import time
 import random
+from turtle import clear
 
-# Row 1
-one_one = []
-one_two = []
-one_three = []
-one_four = []
-one_five = []
-one_six = []
-one_seven = []
-one_eight = []
-one_nine = []
-one_ten = []
 
-# Row 2
-two_one = []
-two_two = []
-two_three = []
-two_four = []
-two_five = []
-two_six = []
-two_seven = []
-two_eight = []
-two_nine = []
-two_ten = []
-
-# Row 3
-three_one = []
-three_two = []
-three_three = []
-three_four = []
-three_five = []
-three_six = []
-three_seven = []
-three_eight = []
-three_nine = []
-three_ten = []
-
-# Row 4
-four_one = []
-four_two = []
-four_three = []
-four_four = []
-four_five = []
-four_six = []
-four_seven = []
-four_eight = []
-four_nine = []
-four_ten = []
-
-# Row 5
-five_one = []
-five_two = []
-five_three = []
-five_four = []
-five_five = []
-five_six = []
-five_seven = []
-five_eight = []
-five_nine = []
-five_ten = []
-
-# Row 6
-six_one = []
-six_two = []
-six_three = []
-six_four = []
-six_five = []
-six_six = []
-six_seven = []
-six_eight = []
-six_nine = []
-six_ten = []
-
-# Row 7
-seven_one = []
-seven_two = []
-seven_three = []
-seven_four = []
-seven_five = []
-seven_six = []
-seven_seven = []
-seven_eight = []
-seven_nine = []
-seven_ten = []
-
-# Row 8
-eight_one = []
-eight_two = []
-eight_three = []
-eight_four = []
-eight_five = []
-eight_six = []
-eight_seven = []
-eight_eight = []
-eight_nine = []
-eight_ten = []
-
-# Row 9
-nine_one = []
-nine_two = []
-nine_three = []
-nine_four = []
-nine_five = []
-nine_six = []
-nine_seven = []
-nine_eight = []
-nine_nine = []
-nine_ten = []
-
-# Row 10
-ten_one = []
-ten_two = []
-ten_three = []
-ten_four = []
-ten_five = []
-ten_six = []
-ten_seven = []
-ten_eight = []
-ten_nine = []
-ten_ten = []
+# Loop var
+loopSelection = True
 
 # Ships and how many rows they take
 Carter = 5
@@ -138,10 +23,9 @@ Destroyer = 2
 # Ships table so we can compare choice
 ships = ["carter","battleship","cruiser","submarine","destroyer"]
 
-print("Hello user, and welcome to battleships!\n If you want to play enter 1, if you want to see the credits enter 2, if you want to quit enter 3.")
-
 def clearConsole():
     print('\n'*150)
+
 
 def coin_flip():
     number = random.randint(1,2)
@@ -150,37 +34,71 @@ def coin_flip():
     else:
         return "Tails"
 
-def shipSelect(ship,top,side,rotation):
+def shipSelect():
+
+    clearConsole()
+    print("Now you are going to select your ship, and then put in which Top row, and bottom row that you want it in.")
      
-     for i,v in enumerate(ships):
-         if str.lower(ship) == v:
-             
-             list.remove(v)
+    while loopSelection == True:
+
+        time.sleep(4)
+        clearConsole()
+
+        print("Ships left:",ships)
+        ship = input("Ship: ")
+        top = int(input("Top Row: "))
+        side = int(input("Side Row: "))
+        rotation = input("Rotate?(Y = yes, N = no): ")
+
+        for i,v in enumerate(ships):
+            if str.lower(ship) == v: # Checking if they find the ship in the list
+                if top > 0 or side > 0 or str.lower(rotation) != "y" or str.lower(rotation) != "n": # checking if the player met the conditionals
+                    print()
+                    
+                
+
+                
 
 def start_game(startingPosition):
     if startingPosition == 1:
         clearConsole()
         print("So since you are first, you get to select your ships positions first.")
-        print("\nNow you are going to select your ship, and then put in which Top row, then bottom row you want it in. (Rotate it type R as the last one, if you don't leave it blank)")
-        
-        shipSelection = input("Ship: ")
-        topRow = input("Top Row: ")
-        sideRow = input("Side Row: ")
-        rotation = input("Rotate?(Y = yes, N = no): ")
-        shipSelect()
+    
+        if shipSelect() == True:
+            loopSelection = False
+
     elif startingPosition == 2:
         clearConsole()
         print("So since you are second, you get to select your ships positions after the AI.")
+        time.sleep(4)
+        clearConsole()
+        print("Waiting for the AI to finish selecting....")
+        time.sleep(10)
+        clearConsole()
+        print("The AI has finished selecting his ships positions, it's now your turn.")
+        time.sleep(4)
+        if shipSelect() == True:
+            loopSelection = False
+        
 
 def user_choice(choice):
     clearConsole()
     if choice == "1":
 
-        print("Flip a coin and if land heads you go first, if you land tails you go second. (PRESS ENTER TO CONTINUE)")
+        print("Flip a coin and if it lands heads you go first, if you land tails you go second. (PRESS ENTER TO CONTINUE)")
         input("")
         clearConsole()
 
-        print("Flipping....")
+        print("Flipping.")
+        time.sleep(1)
+        clearConsole()
+        print("Flipping..")
+        time.sleep(1)
+        clearConsole()
+        print("Flipping...")
+        time.sleep(2)
+        clearConsole()
+
         coinflip = coin_flip()
         if coinflip == "Heads":
             print("You got heads so you go first..")
@@ -199,4 +117,8 @@ def user_choice(choice):
         print("That is not a number, try again.")
         user_choice(input(""))
 
+
+# Starting code
+clearConsole()
+print("Hello user, and welcome to battleships!\n If you want to play enter 1, if you want to see the credits enter 2, if you want to quit enter 3.")
 user_choice(input(""))
