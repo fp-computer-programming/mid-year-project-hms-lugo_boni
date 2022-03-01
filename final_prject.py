@@ -7,6 +7,7 @@
 
 import time
 import random
+from timeit import repeat
 
 # Tables for plr and ai to be accessed later for ships
 # 0 = water , 1 = Ship, 2 = Hit
@@ -16,18 +17,8 @@ aiTable = [[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,
 # Visible plr Board
 board = []
 
-# Loop var
-loopSelection = True
-
-# Ships and how many rows they take
-Carter = 5
-Battleship = 4
-Cruiser = 3
-Submarine = 3
-Destroyer = 2
-
 # Ships table so we can compare choice
-ships = ["carter","battleship","cruiser","submarine","destroyer"]
+ships = {"carrier":5,"battleship":4,"cruiser":3,"submarine":3,"destroyer":2}
 
 def wait(wait):
     time.sleep(wait)
@@ -36,22 +27,8 @@ def clearConsole():
     print('\n'*150)
 
 def printShips():
-    while len(board) < 100:
-
-        fin = False
-        counter = 0
-
-        for _,var in enumerate(plrTable[counter]):
-            if not fin:
-                fin = True
-                board.append(var)
-                
-                if counter == 10:
-                    counter = 0
-                else:
-                    counter += 1
-                break
-    print(board)
+    for i,v in enumerate(plrTable):
+        print(v)
 
 def coin_flip():
     number = random.randint(1,2)
@@ -60,41 +37,55 @@ def coin_flip():
     else:
         return "Tails"
 
+# Loop var
+loopSelection = True
+
 def shipSelect():
+    global loopSelection
 
     clearConsole()
     print("Now you are going to select your ship, and then put in which Top row, and bottom row that you want it in.")
      
     while loopSelection == True:
+        if len(ships) > 0:
+            wait(4)
+            clearConsole()
 
-        wait(4)
-        clearConsole()
+            printShips()
+            print("\nShips left:",ships)
+            ship = input("Ship: ")
+            try:
+                top = int(input("Top Row: "))
+                side = int(input("Side Row: "))
 
-        print("Ships left:",ships)
-        ship = input("Ship: ")
-        try:
-            top = int(input("Top Row: "))
-            side = int(input("Side Row: "))
-            rotation = input("Rotate?(Y = yes, N = no): ")
-
-            for i,v in enumerate(ships):
-                if str.lower(ship) == v: # Checking if they find the ship in the list
-                    if top > 0 or side > 0 or str.lower(rotation) == "y" or str.lower(rotation) == "n": # checking if the player met the conditionals
-                        if plrTable[top-1][side-1] == 0:
-                            plrTable[top-1][side-1] = 1
-                            del ships[i]
-                            printShips()
+                counter = 0
+                checkCounter = 0
+                for (i,v) in ships.items():
+                    if str.lower(ship) == i: # Checking if they find the ship in the list
+                        if top > 0 and side > 0 and plrTable[side-1][top-1] == 0: # checking if the player met the conditionals
+                            while counter <  v:
+                                if plrTable[side-1+counter][top-1] == 0:
+                                    counter += 1
+                                plrTable[side-1+checkCounter][top-1] = 1
+                                checkCounter += 1
+                        del ships[i]
+                        printShips()
                         # del ships[i]
                     else:
                         print("Hmm, something you inputted wasn't put in correctly. Try again.")
-        except:
-            print("Hmmm, one of the rows you tried inputting isn't a number. Try again.")
+            except:
+                continue
+        else:
+            return True
+            
                     
                 
 
                 
 
 def start_game(startingPosition):
+    global loopSelection
+    
     if startingPosition == 1:
         clearConsole()
         print("So since you are first, you get to select your ships positions first.")
